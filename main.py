@@ -13,15 +13,15 @@ TELEGRAM_CHAT_ID = os.getenv('TELEGRAM_CHAT_ID')
 
 @app.get("/")
 def read_root():
-    return JSONResponse(content={"message": "Вы запустили Backend сервиса! Добро пожаловать в TokiBot API."})
+    return JSONResponse(
+        content={"message": "Ваш Backend работает! Привет из TokiBot API."},
+        media_type="application/json; charset=utf-8"
+    )
 
 @app.get("/send-telegram")
 def send_telegram_message():
     if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID:
-        return JSONResponse(
-            content={"error": "TELEGRAM_BOT_TOKEN или TELEGRAM_CHAT_ID не установлены"},
-            status_code=400
-        )
+        return {"error": "TELEGRAM_BOT_TOKEN или TELEGRAM_CHAT_ID не установлены"}
 
     message = "✅ Ваш бот успешно работает!"
     url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
@@ -30,4 +30,4 @@ def send_telegram_message():
         "text": message
     }
     response = requests.post(url, data=payload)
-    return JSONResponse(content={"status": response.status_code, "response": response.json()})
+    return {"status": response.status_code, "response": response.json()}
