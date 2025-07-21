@@ -30,4 +30,8 @@ def send_telegram_message():
         "text": message
     }
     response = requests.post(url, data=payload)
+
+    if response.status_code != 200:
+        return {"status": response.status_code, "error": response.json()}
+
     return {"status": response.status_code, "response": response.json()}
